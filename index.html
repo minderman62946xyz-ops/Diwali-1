@@ -1,0 +1,694 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Diwali Shalini! ✨</title>
+    
+    <!-- Google Fonts for typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti Library for premium firework effects -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* === THEME & VARIABLES === */
+        :root {
+            --bg-dark: #0f0c29;
+            --bg-mid: #302b63;
+            --bg-light: #24243e;
+            --text-main: #ffffff;
+            --accent-gold: #ffd700;
+            --accent-pink: #ff69b4;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* === GLOBAL STYLES === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-mid) 50%, var(--bg-light) 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+        /* Magical Night Sky Background */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px #fff, 0 0 20px var(--accent-gold); }
+        }
+
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: floatUp infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* === UI COMPONENTS === */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            z-index: 10;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 105, 180, 0.5);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff1493, #ff8c00);
+            border: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: pulse-glow 2s infinite;
+            z-index: 10;
+            position: relative;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.8);
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 15px rgba(255, 20, 147, 0.5); }
+            50% { box-shadow: 0 0 35px rgba(255, 140, 0, 0.8); }
+            100% { box-shadow: 0 0 15px rgba(255, 20, 147, 0.5); }
+        }
+
+        /* Fade-in Animation for scrolling */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === SECTIONS === */
+        
+        /* Exp 1: Welcome Screen */
+        #welcome-screen {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 20;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .title-main {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            animation: floatText 4s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: #ffd1dc;
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        @keyframes floatText {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Main Content Wrapper */
+        #main-content {
+            display: none;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Exp 2: Personal Message */
+        .message-section {
+            margin-bottom: 5rem;
+            text-align: left;
+            overflow: hidden; /* For absolute floating items */
+        }
+        
+        .letter-text {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: #f0f0f0;
+            white-space: pre-wrap;
+            position: relative;
+            z-index: 2;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: var(--accent-gold);
+            text-align: right;
+            margin-top: 2rem;
+            display: block;
+        }
+
+        /* Exp 3: Interactive Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        @media (min-width: 768px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .interactive-card {
+            cursor: pointer;
+            text-align: center;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--accent-gold);
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+
+        .card-content {
+            display: none;
+            font-size: 1.1rem;
+            color: #fff;
+            padding: 1rem;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Exp 4: Fireworks Magic */
+        .fireworks-area {
+            border: 2px dashed rgba(255, 215, 0, 0.5);
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            padding: 5rem 2rem;
+            text-align: center;
+            cursor: crosshair;
+            margin-bottom: 5rem;
+            transition: background 0.3s ease;
+        }
+
+        .fireworks-area:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .fireworks-area h2 {
+            font-size: 2.2rem;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            pointer-events: none;
+        }
+
+        .fireworks-area p {
+            color: #ddd;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        /* Exp 5: Cute Friendship Zone */
+        .warning-zone {
+            background: rgba(255, 105, 180, 0.1);
+            border-left: 6px solid var(--accent-pink);
+            text-align: center;
+            margin-bottom: 5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .warning-title {
+            color: var(--accent-pink);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: floatHeart 4s infinite linear;
+            opacity: 0.6;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(50px) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+        }
+
+        /* Exp 6: Final Surprise */
+        .finale-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .grand-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-gold), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+        }
+
+        .finale-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #e0e0e0;
+            max-width: 700px;
+            margin-bottom: 3rem;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-gold);
+            color: var(--bg-dark);
+            box-shadow: 0 0 15px var(--accent-gold);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background Elements -->
+    <div id="stars-container"></div>
+
+    <!-- EXPERIENCE 1: Welcome Screen -->
+    <section id="welcome-screen">
+        <h1 class="title-main glow-text">Heyyy Shaliniii! 🥹💗</h1>
+        <p class="subtitle">Someone has a VERY SPECIAL Diwali surprise for you!</p>
+        <button class="btn-primary" onclick="startExperience()">OPEN YOUR SURPRISE ✨</button>
+    </section>
+
+    <!-- Main Content Container -->
+    <div id="main-content">
+
+        <!-- EXPERIENCE 2: Personal Message -->
+        <section class="glass-card message-section fade-in">
+            <!-- Decorative floating items -->
+            <span style="position: absolute; top: 10%; right: 10%; font-size: 2rem; opacity: 0.5;">🪔</span>
+            <span style="position: absolute; bottom: 20%; left: 5%; font-size: 2rem; opacity: 0.5;">✨</span>
+            
+            <div class="letter-text">Dear Shalini! 💗
+
+This Diwali, I don't just want to wish you happiness... I want your entire world to glow with happiness!
+
+You're genuinely one of the sweetest, cutest and most special people. Your smile deserves endless reasons to shine.
+
+May your life always be filled with beautiful moments, unlimited laughter, little surprises and magical memories.
+
+Happy Diwali, Shaliniiii! 🪔✨</div>
+            <div class="signature">Your Best Friend ❤️</div>
+        </section>
+
+        <!-- EXPERIENCE 3: Interactive Surprise Buttons -->
+        <section class="cards-grid">
+            
+            <!-- Card 1: Gift -->
+            <div class="glass-card interactive-card fade-in" onclick="handleCardClick(this, 'gift')">
+                <div class="card-front">
+                    <div class="card-icon">🎁</div>
+                    <div class="card-title">OPEN A SECRET GIFT</div>
+                </div>
+                <div class="card-content">
+                    You are the best gift life has given to your friends! 💖
+                </div>
+            </div>
+
+            <!-- Card 2: Counter -->
+            <div class="glass-card interactive-card fade-in" onclick="handleCounterClick(this)">
+                <div class="card-front">
+                    <div class="card-icon" id="counter-display">🥰</div>
+                    <div class="card-title">HOW SPECIAL ARE YOU?</div>
+                </div>
+                <div class="card-content" id="counter-result">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <!-- Card 3: Wish -->
+            <div class="glass-card interactive-card fade-in" onclick="handleWishClick(this)">
+                <div class="card-front">
+                    <div class="card-icon">🌈</div>
+                    <div class="card-title">YOUR DIWALI WISH</div>
+                </div>
+                <div class="card-content" id="wish-result">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <!-- Card 4: Secret -->
+            <div class="glass-card interactive-card fade-in" onclick="handleCardClick(this, 'secret')">
+                <div class="card-front">
+                    <div class="card-icon">💖</div>
+                    <div class="card-title">A LITTLE SECRET</div>
+                </div>
+                <div class="card-content">
+                    Secret: This website took extra effort because an ordinary Happy Diwali message wasn't special enough for someone like you! ✨
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE 4: Fireworks Magic -->
+        <section class="fireworks-area fade-in" id="fireworks-canvas">
+            <h2 class="glow-text">Tap the sky for magic! 🎇</h2>
+            <p>May your happiness sparkle brighter than every firework!</p>
+        </section>
+
+        <!-- EXPERIENCE 5: Cute Friendship Zone -->
+        <section class="glass-card warning-zone fade-in">
+            <!-- Animated Hearts Background -->
+            <span class="floating-heart" style="left: 20%; animation-delay: 0s;">💖</span>
+            <span class="floating-heart" style="left: 50%; animation-delay: 2s;">🧸</span>
+            <span class="floating-heart" style="right: 20%; animation-delay: 1s;">🌸</span>
+            <span class="floating-heart" style="right: 40%; animation-delay: 3s;">🥰</span>
+
+            <div class="warning-title">
+                ⚠️ Warning ⚠️
+            </div>
+            <p style="font-size: 1.2rem; position: relative; z-index: 2;">
+                An extremely cute person named <strong style="color:var(--accent-gold);">Shalini</strong> has entered the Diwali celebration!
+            </p>
+        </section>
+
+        <!-- EXPERIENCE 6: Final Surprise -->
+        <section class="finale-section fade-in">
+            <h1 class="grand-title">SHALINIIII! 🥹💗<br>HAPPIEST DIWALIIII! 🪔✨</h1>
+            <div class="finale-text">
+                Keep smiling, keep shining and keep being the wonderful person you are.<br><br>
+                Lots of happiness, unlimited chocolates, endless laughter and millions of beautiful memories for you!
+            </div>
+            <div class="signature" style="margin-bottom: 3rem;">— Your Best Friend ❤️</div>
+            
+            <button class="btn-secondary" onclick="replayExperience()">
+                Replay Experience 🔁
+            </button>
+        </section>
+
+    </div>
+
+    <script>
+        // --- 1. Background Generation (Stars & Particles) ---
+        const starsContainer = document.getElementById('stars-container');
+        
+        // Generate Stars
+        for (let i = 0; i < 100; i++) {
+            let star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.animationDuration = (Math.random() * 3 + 1) + 's';
+            star.style.animationDelay = (Math.random() * 2) + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Generate Floating Gold Particles
+        for (let i = 0; i < 20; i++) {
+            let particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 6 + 2 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particle.style.animationDelay = (Math.random() * 5) + 's';
+            starsContainer.appendChild(particle);
+        }
+
+        // --- 2. Welcome Screen Transition ---
+        function startExperience() {
+            // Initial blast of confetti
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#ffd700', '#ff69b4', '#ffffff', '#ff1493']
+            });
+
+            const welcomeScreen = document.getElementById('welcome-screen');
+            const mainContent = document.getElementById('main-content');
+            
+            welcomeScreen.style.transform = 'translateY(-20px)';
+            welcomeScreen.style.opacity = '0';
+            
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+                // Trigger scroll check for fade-ins immediately after display change
+                checkFadeIns(); 
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 800);
+        }
+
+        // --- 3. Scroll Fade-in Observer ---
+        function checkFadeIns() {
+            const elements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            elements.forEach(el => observer.observe(el));
+        }
+
+        // --- 4. Interactive Cards Logic ---
+        
+        // Generic flip/reveal
+        function handleCardClick(card, type) {
+            if(card.classList.contains('opened')) return;
+            
+            const front = card.querySelector('.card-front');
+            const content = card.querySelector('.card-content');
+            
+            front.style.display = 'none';
+            content.style.display = 'block';
+            card.classList.add('opened');
+            
+            // Mini confetti for opening
+            confetti({
+                particleCount: 40,
+                spread: 50,
+                origin: { 
+                    x: card.getBoundingClientRect().left / window.innerWidth + 0.1,
+                    y: card.getBoundingClientRect().top / window.innerHeight + 0.1 
+                },
+                colors: type === 'gift' ? ['#ffd700'] : ['#ff69b4']
+            });
+        }
+
+        // Counter Logic
+        function handleCounterClick(card) {
+            if(card.classList.contains('opened')) return;
+            
+            const front = card.querySelector('.card-front');
+            const display = document.getElementById('counter-display');
+            const result = document.getElementById('counter-result');
+            
+            card.classList.add('opened');
+            let count = 0;
+            
+            const interval = setInterval(() => {
+                count += 4;
+                display.innerText = count + '%';
+                
+                if(count >= 100) {
+                    clearInterval(interval);
+                    front.style.display = 'none';
+                    result.style.display = 'block';
+                    result.innerHTML = `<span style="font-size:2rem; color:var(--accent-pink); display:block; margin-bottom:10px;">INFINITY ♾️</span> Some people are simply irreplaceable. You're one of them!`;
+                    
+                    confetti({
+                        particleCount: 60,
+                        spread: 70,
+                        colors: ['#ff69b4', '#ffffff']
+                    });
+                }
+            }, 40);
+        }
+
+        // Random Wish Logic
+        const wishes = [
+            "May your glow outshine the moon tonight! 🌙",
+            "May every single day bring a new little surprise for you! 🎁",
+            "May you laugh so hard this year that your stomach hurts! 😂",
+            "May your life be as sweet as the Diwali sweets you eat! 🍬",
+            "May all your silent prayers and secret dreams come true! ✨"
+        ];
+        
+        function handleWishClick(card) {
+            const front = card.querySelector('.card-front');
+            const result = document.getElementById('wish-result');
+            
+            front.style.display = 'none';
+            result.style.display = 'block';
+            
+            const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+            result.innerHTML = `
+                <p style="margin-bottom:15px; font-size:1.15rem;">${randomWish}</p>
+                <small style="color:var(--accent-gold); font-size:0.85rem; opacity:0.8;">(Tap again for another wish!)</small>
+            `;
+            
+            // Allow re-clicking for this specific card
+            card.onclick = () => handleWishClick(card);
+            
+            confetti({
+                particleCount: 30,
+                spread: 60,
+                origin: { y: 0.8 }
+            });
+        }
+
+        // --- 5. Fireworks Area Interaction ---
+        const fireworksArea = document.getElementById('fireworks-canvas');
+        fireworksArea.addEventListener('click', (e) => {
+            // Calculate relative click position for confetti origin
+            const rect = fireworksArea.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+
+            // Ensure origin is within bounds 0-1
+            const originX = Math.min(Math.max(x, 0.1), 0.9);
+            const originY = Math.min(Math.max(y, 0.1), 0.9);
+
+            // Realistic firework effect
+            const duration = 1500;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 25, spread: 360, ticks: 60, zIndex: 0 };
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                
+                const particleCount = 40 * (timeLeft / duration);
+                
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: originX, y: originY },
+                    colors: ['#ff1493', '#00ffff', '#ffd700', '#ff4500', '#9400d3']
+                }));
+            }, 250);
+        });
+
+        // --- 6. Replay Functionality ---
+        function replayExperience() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => {
+                location.reload();
+            }, 800);
+        }
+
+    </script>
+</body>
+</html>
+```
